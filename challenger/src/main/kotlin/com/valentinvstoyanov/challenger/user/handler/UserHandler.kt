@@ -3,12 +3,9 @@ package com.valentinvstoyanov.challenger.user.handler
 import com.valentinvstoyanov.challenger.user.domain.model.CreateUser
 import com.valentinvstoyanov.challenger.user.domain.model.User
 import com.valentinvstoyanov.challenger.user.domain.usecase.*
-import org.springframework.web.reactive.function.server.ServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.*
 import org.springframework.web.reactive.function.server.ServerResponse.created
 import org.springframework.web.reactive.function.server.ServerResponse.ok
-import org.springframework.web.reactive.function.server.bodyToMono
-import org.springframework.web.reactive.function.server.json
 import reactor.core.publisher.Mono
 import java.net.URI
 
@@ -34,8 +31,8 @@ class UserHandler(
         deleteUser(request.pathVariable("id")).flatMap { ok().json().bodyValue(it) }
 
     fun getUserById(request: ServerRequest): Mono<ServerResponse> =
-        getUserById(request.pathVariable("id")).flatMap { ok().json().bodyValue(it) }
+        getUserById(request.pathVariable("id")).flatMap { ok().bodyValue(it) }
 
     fun getAllUsers(request: ServerRequest): Mono<ServerResponse> =
-        ok().json().bodyValue(getAllUsers())
+        ok().body(getAllUsers())
 }
