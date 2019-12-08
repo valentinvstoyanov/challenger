@@ -1,4 +1,4 @@
-package com.valentinvstoyanov.challenger.user.model
+package com.valentinvstoyanov.challenger.user.domain.model
 
 import java.time.Instant
 
