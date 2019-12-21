@@ -24,6 +24,7 @@ configurations {
 repositories {
 	mavenCentral()
 	maven("https://repo.spring.io/milestone")
+	maven("https://dl.bintray.com/konform-kt/konform")
 }
 
 dependencies {
@@ -35,6 +36,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("org.springframework.fu:spring-fu-kofu:0.2.2")
+	implementation("io.konform:konform:0.1.0")
+	implementation("io.konform:konform-common:0.1.0")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {

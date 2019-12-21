@@ -2,7 +2,7 @@ package com.valentinvstoyanov.challenger
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import com.valentinvstoyanov.challenger.user.beans as userBeans
+import com.valentinvstoyanov.challenger.user.application.beans as userBeans
 
 @SpringBootApplication
 class ChallengerApplication
