@@ -2,11 +2,9 @@ package com.valentinvstoyanov.challenger.user.application
 
 import com.valentinvstoyanov.challenger.user.domain.UserService
 import com.valentinvstoyanov.challenger.user.domain.model.CreateUser
-import org.springframework.web.reactive.function.server.ServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse
+import org.springframework.web.reactive.function.server.*
 import org.springframework.web.reactive.function.server.ServerResponse.created
-import org.springframework.web.reactive.function.server.bodyToMono
-import org.springframework.web.reactive.function.server.json
+import org.springframework.web.reactive.function.server.ServerResponse.ok
 import reactor.core.publisher.Mono
 import java.net.URI
 
@@ -25,9 +23,9 @@ class UserHandler(private val userService: UserService) {
 //    fun deleteUser(request: ServerRequest): Mono<ServerResponse> =
 //        deleteUser(request.pathVariable("id")).flatMap { ok().json().bodyValue(it) }
 //
-//    fun getUserById(request: ServerRequest): Mono<ServerResponse> =
-//        getUserById(request.pathVariable("id")).flatMap { ok().bodyValue(it) }
-//
-//    fun getAllUsers(request: ServerRequest): Mono<ServerResponse> =
-//        ok().body(getAllUsers())
+    fun getUserById(request: ServerRequest): Mono<ServerResponse> =
+        userService.getUserById(request.pathVariable("id")).flatMap { ok().bodyValue(it) }
+
+    fun getAllUsers(request: ServerRequest): Mono<ServerResponse> =
+        ok().body(userService.getAllUsers())
 }

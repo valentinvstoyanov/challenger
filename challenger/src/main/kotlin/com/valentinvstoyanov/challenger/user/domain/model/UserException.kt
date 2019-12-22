@@ -1,6 +1,7 @@
 package com.valentinvstoyanov.challenger.user.domain.model
 
 sealed class UserException : RuntimeException()
-object UsernameAlreadyTakenException : UserException()
-object EmailAlreadyTakenException : UserException()
-object UserValidationException : UserException()
+data class UsernameAlreadyTakenException(val username: String) : UserException()
+data class EmailAlreadyTakenException(val email: String) : UserException()
+data class UserValidationException(val hint: String) : UserException()
+data class UserNotFoundException(val propertyName: String, val propertyValue: String) : UserException()

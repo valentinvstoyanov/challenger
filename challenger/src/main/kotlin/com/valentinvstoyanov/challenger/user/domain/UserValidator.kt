@@ -20,15 +20,23 @@ class UserValidatorImpl : UserValidator {
     private val passwordRegex: String = """^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,64}$"""
 
     private val validateCreateUser: Validation<CreateUser> = Validation {
-        CreateUser::name { pattern(nameRegex) }
-        CreateUser::username { pattern(usernameRegex) }
-        CreateUser::email { pattern(emailRegex) }
-        CreateUser::password { pattern(passwordRegex) }
+        CreateUser::name { pattern(nameRegex) hint "has up to 3 space separated names" }
+        CreateUser::username { pattern(usernameRegex) hint "should be at least 4 and at most 64 characters long consisting of letters, digits, '-', '.' and '_'" }
+        CreateUser::email { pattern(emailRegex) hint "should match the email criteria" }
+        CreateUser::password { pattern(passwordRegex) hint "should be at least 6 and at most 64 characters long containing at least one letter and at least on digit" }
     }
 
     override fun validate(user: CreateUser): Mono<CreateUser> =
-        when(val result = validateCreateUser(user)) {
+        when (val result = validateCreateUser(user)) {
             is Valid -> result.value.toMono()
-            is Invalid -> UserValidationException.toMono()
+            is Invalid -> {
+                val message = listOf(
+                    CreateUser::name,
+                    CreateUser::username,
+                    CreateUser::email,
+                    CreateUser::password
+                ).joinToString { "${it.name} ${result[it].orEmpty().joinToString()}." }
+                UserValidationException(message).toMono()
+            }
         }
 }

@@ -9,7 +9,7 @@ fun routes(userHandler: UserHandler): RouterFunction<ServerResponse> = router {
         POST("/", userHandler::createUser)
 //        PUT("/{id}", userHandler::updateUser)
 //        DELETE("/{id}", userHandler::deleteUser)
-//        GET("/", userHandler::getAllUsers)
-//        GET("/{id}", userHandler::getUserById)
+        GET("/", userHandler::getAllUsers)
+        GET("/{id}", userHandler::getUserById)
     }
 }

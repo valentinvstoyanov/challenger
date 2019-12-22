@@ -10,6 +10,7 @@ fun beans(): BeanDefinitionDsl = beans {
     bean<PersistentUserRepository>()
     bean<UserValidatorImpl>()
     bean<UserServiceImpl>()
+    bean<UserExceptionHandler>()
     bean<UserHandler>()
     bean(::routes)
 }
