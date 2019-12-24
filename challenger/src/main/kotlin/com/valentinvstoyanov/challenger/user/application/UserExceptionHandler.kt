@@ -23,22 +23,22 @@ class UserExceptionHandler : ErrorWebExceptionHandler {
         return when (ex) {
             is UsernameAlreadyTakenException -> {
                 badRequest()
-                    .bodyValue(ApiError(BAD_REQUEST,"Username already taken", listOf(ApiSubError("users", "There is user with this username", "${ex.username} already taken"))))
+                    .bodyValue(ApiError(BAD_REQUEST.value(),"Username already taken", listOf(ApiSubError("users", "There is user with this username", "${ex.username} already taken"))))
                     .flatMap { it.writeTo(exchange, HandlerStrategiesResponseContext(withDefaults())) }
             }
             is EmailAlreadyTakenException -> {
                 badRequest()
-                    .bodyValue(ApiError(BAD_REQUEST, "Email already in use", listOf(ApiSubError("users", "There is user with this email", "${ex.email} already taken"))))
+                    .bodyValue(ApiError(BAD_REQUEST.value(), "Email already in use", listOf(ApiSubError("users", "There is user with this email", "${ex.email} already taken"))))
                     .flatMap { it.writeTo(exchange, HandlerStrategiesResponseContext(withDefaults())) }
             }
             is UserValidationException -> {
                 badRequest()
-                    .bodyValue(ApiError(BAD_REQUEST, "User validation failed", listOf(ApiSubError("users", "User fields validation failed", ex.hint))))
+                    .bodyValue(ApiError(BAD_REQUEST.value(), "User validation failed", listOf(ApiSubError("users", "User fields validation failed", ex.hint))))
                     .flatMap { it.writeTo(exchange, HandlerStrategiesResponseContext(withDefaults())) }
             }
             is UserNotFoundException -> {
                 badRequest()
-                    .bodyValue(ApiError(BAD_REQUEST, "User not found", listOf(ApiSubError("users", "User was not found", "Failed to find user by ${ex.propertyName} given ${ex.propertyValue}"))))
+                    .bodyValue(ApiError(BAD_REQUEST.value(), "User not found", listOf(ApiSubError("users", "User was not found", "Failed to find user by ${ex.propertyName} given ${ex.propertyValue}"))))
                     .flatMap { it.writeTo(exchange, HandlerStrategiesResponseContext(withDefaults())) }
             }
         }

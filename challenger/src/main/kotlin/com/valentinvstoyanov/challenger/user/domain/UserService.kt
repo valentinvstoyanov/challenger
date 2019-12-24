@@ -12,8 +12,7 @@ interface UserService {
     fun getAllUsers(): Flux<User>
 }
 
-class UserServiceImpl(private val userRepository: UserRepository, private val userValidator: UserValidator) :
-    UserService {
+class UserServiceImpl(private val userRepository: UserRepository, private val userValidator: UserValidator) : UserService {
     override fun createUser(user: CreateUser): Mono<User> {
         return userValidator.validate(user)
             .filterWhen { userRepository.getByUsername(user.username).hasElement().map { !it } }
