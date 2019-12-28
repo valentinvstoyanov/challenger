@@ -1,13 +1,15 @@
-package com.valentinvstoyanov.challenger.user.application
+package com.valentinvstoyanov.challenger.user.application.handler
 
 import com.valentinvstoyanov.challenger.ApiError
 import com.valentinvstoyanov.challenger.ApiSubError
 import com.valentinvstoyanov.challenger.user.domain.model.*
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
 import org.springframework.http.HttpStatus.BAD_REQUEST
+import org.springframework.http.HttpStatus.UNAUTHORIZED
 import org.springframework.http.codec.HttpMessageWriter
 import org.springframework.web.reactive.function.server.HandlerStrategies
 import org.springframework.web.reactive.function.server.HandlerStrategies.withDefaults
+import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.ServerResponse.Context
 import org.springframework.web.reactive.function.server.ServerResponse.badRequest
 import org.springframework.web.reactive.result.view.ViewResolver
@@ -24,7 +26,8 @@ class UserExceptionHandler : ErrorWebExceptionHandler {
             is UsernameAlreadyTakenException -> {
                 badRequest()
                     .bodyValue(ApiError(BAD_REQUEST.value(),"Username already taken", listOf(ApiSubError("users", "There is user with this username", "${ex.username} already taken"))))
-                    .flatMap { it.writeTo(exchange, HandlerStrategiesResponseContext(withDefaults())) }
+                    .flatMap { it.writeTo(exchange,
+                        HandlerStrategiesResponseContext( withDefaults())) }
             }
             is EmailAlreadyTakenException -> {
                 badRequest()
@@ -39,6 +42,11 @@ class UserExceptionHandler : ErrorWebExceptionHandler {
             is UserNotFoundException -> {
                 badRequest()
                     .bodyValue(ApiError(BAD_REQUEST.value(), "User not found", listOf(ApiSubError("users", "User was not found", "Failed to find user by ${ex.propertyName} given ${ex.propertyValue}"))))
+                    .flatMap { it.writeTo(exchange, HandlerStrategiesResponseContext(withDefaults())) }
+            }
+            is UserLoginException -> {
+                ServerResponse.status(UNAUTHORIZED)
+                    .bodyValue(ApiError(UNAUTHORIZED.value(), "User login failed", listOf(ApiSubError("users", "User credentials error", "Failed to login user with ${ex.emailOrUsername}"))))
                     .flatMap { it.writeTo(exchange, HandlerStrategiesResponseContext(withDefaults())) }
             }
         }

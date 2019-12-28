@@ -11,19 +11,31 @@ import reactor.kotlin.core.publisher.toMono
 
 interface UserValidator {
     fun validate(user: CreateUser): Mono<CreateUser>
+//    fun validateEmail(email: String): Mono<String>
+//    fun validateUsername(username: String): Mono<String>
 }
 
 class UserValidatorImpl : UserValidator {
-    private val nameRegex: String = """^([a-zA-Z]+|[a-zA-Z]+\s{1}[a-zA-Z]{1,}|[a-zA-Z]+\s{1}[a-zA-Z]{3,}\s{1}[a-zA-Z]{1,})$"""
-    private val usernameRegex: String = """^[a-zA-z0-9-._]{4,64}$"""
-    private val emailRegex: String = """^[a-zA-Z0-9\.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"""
-    private val passwordRegex: String = """^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,64}$"""
+    private val nameRegex = Regex("""^([a-zA-Z]+|[a-zA-Z]+\s{1}[a-zA-Z]{1,}|[a-zA-Z]+\s{1}[a-zA-Z]{3,}\s{1}[a-zA-Z]{1,})$""")
+    private val usernameRegex = Regex("""^[a-zA-z0-9-._]{4,64}$""")
+    private val emailRegex = Regex("""^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$""")
+    private val passwordRegex = Regex("""^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,64}$""")
+
+    private val nameHint = "has up to 3 space separated names"
+    private val usernameHint = "should be at least 4 and at most 64 characters long consisting of letters, digits, '-', '.' and '_'"
+    private val emailHint = "should match the email criteria"
+    private val passwordHint = "should be at least 6 and at most 64 characters long containing at least one letter and at least on digit"
+
+//    private fun validateString(str: String, regex: Regex, hint: String) =
+//        str.toMono()
+//            .filter { it.matches(regex) }
+//            .switchIfEmpty { UserValidationException(hint).toMono() }
 
     private val validateCreateUser: Validation<CreateUser> = Validation {
-        CreateUser::name { pattern(nameRegex) hint "has up to 3 space separated names" }
-        CreateUser::username { pattern(usernameRegex) hint "should be at least 4 and at most 64 characters long consisting of letters, digits, '-', '.' and '_'" }
-        CreateUser::email { pattern(emailRegex) hint "should match the email criteria" }
-        CreateUser::password { pattern(passwordRegex) hint "should be at least 6 and at most 64 characters long containing at least one letter and at least on digit" }
+        CreateUser::name { pattern(nameRegex) hint nameHint }
+        CreateUser::username { pattern(usernameRegex) hint usernameHint }
+        CreateUser::email { pattern(emailRegex) hint emailHint }
+        CreateUser::password { pattern(passwordRegex) hint passwordHint }
     }
 
     override fun validate(user: CreateUser): Mono<CreateUser> =
@@ -39,4 +51,10 @@ class UserValidatorImpl : UserValidator {
                 UserValidationException(message).toMono()
             }
         }
+
+//    override fun validateEmail(email: String): Mono<String> =
+//        validateString(str = email, hint = emailHint, regex = emailRegex)
+//
+//    override fun validateUsername(username: String): Mono<String> =
+//        validateString(str = username, hint = usernameHint, regex = usernameRegex)
 }
