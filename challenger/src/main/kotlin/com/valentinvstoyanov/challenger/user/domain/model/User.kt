@@ -10,5 +10,6 @@ data class User(
     val password: String,
     val followers: List<User>,
     val following: List<User>,
-    val createdAt: Instant
+    val createdAt: Instant,
+    val enabled: Boolean = true
 )

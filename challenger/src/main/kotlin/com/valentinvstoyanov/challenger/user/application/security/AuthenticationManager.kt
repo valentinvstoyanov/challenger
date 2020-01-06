@@ -6,7 +6,6 @@ import com.valentinvstoyanov.challenger.user.domain.model.Token
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import reactor.core.publisher.Mono
 
 class AuthenticationManager(private val tokenService: TokenService, private val userService: UserService) : ReactiveAuthenticationManager {
@@ -15,6 +14,6 @@ class AuthenticationManager(private val tokenService: TokenService, private val 
             .map { it.credentials.toString() }
             .flatMap { tokenService.parseToken(Token(it)) }
             .flatMap { userService.getUserById(it.userId) }
-            .map { UsernamePasswordAuthenticationToken(it.username, it.password, listOf(SimpleGrantedAuthority("ROLE_USER"))) }
+            .map { UsernamePasswordAuthenticationToken(it.id, it.password, emptyList()) }
     }
 }

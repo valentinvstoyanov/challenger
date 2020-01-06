@@ -5,6 +5,7 @@ import com.valentinvstoyanov.challenger.user.application.handler.UserHandler
 import com.valentinvstoyanov.challenger.user.application.security.AuthenticationManager
 import com.valentinvstoyanov.challenger.user.application.security.SecurityConfig
 import com.valentinvstoyanov.challenger.user.application.security.SecurityContextRepository
+import com.valentinvstoyanov.challenger.user.application.security.UserDetailsService
 import com.valentinvstoyanov.challenger.user.data.PersistentUserRepository
 import com.valentinvstoyanov.challenger.user.domain.JwtTokenService
 import com.valentinvstoyanov.challenger.user.domain.SecurityPasswordEncoder
@@ -24,6 +25,7 @@ fun beans(): BeanDefinitionDsl = beans {
     bean<UserServiceImpl>()
     bean<AuthenticationManager>()
     bean<SecurityContextRepository>()
+    bean<UserDetailsService>()
     bean(SecurityConfig::springSecurityFilterChain)
     bean<UserExceptionHandler>()
     bean<UserHandler>()

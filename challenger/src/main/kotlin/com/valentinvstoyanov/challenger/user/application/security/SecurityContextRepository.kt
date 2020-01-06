@@ -17,7 +17,7 @@ class SecurityContextRepository(private val authenticationManager: ReactiveAuthe
 
     override fun load(exchange: ServerWebExchange?): Mono<SecurityContext> {
         val authHeader = exchange?.request?.headers?.getFirst(HttpHeaders.AUTHORIZATION)
-        val token = authHeader?.takeIf { it.startsWith(BEARER) }?.substring(BEARER.length)
+        val token = authHeader?.takeIf { it.startsWith(BEARER) }
 
         return Mono.justOrEmpty(token)
             .map { UsernamePasswordAuthenticationToken(it, it) }

@@ -31,9 +31,11 @@ class JwtTokenService(secret: String, private val expirationMillis: Long) : Toke
     }
 
     override fun parseToken(token: Token): Mono<TokenContent> = Mono.fromCallable {
+        val jwt = token.jwt.substring(Token.BEARER.length)
+
         val claims = Jwts.parser()
             .setSigningKey(secretKey)
-            .parseClaimsJws(token.jwt)
+            .parseClaimsJws(jwt)
             .body
 
         TokenContent(
