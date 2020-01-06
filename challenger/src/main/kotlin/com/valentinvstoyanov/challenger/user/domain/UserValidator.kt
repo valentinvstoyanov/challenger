@@ -1,6 +1,7 @@
 package com.valentinvstoyanov.challenger.user.domain
 
 import com.valentinvstoyanov.challenger.user.domain.model.CreateUser
+import com.valentinvstoyanov.challenger.user.domain.model.User
 import com.valentinvstoyanov.challenger.user.domain.model.UserValidationException
 import io.konform.validation.Invalid
 import io.konform.validation.Valid
@@ -11,8 +12,7 @@ import reactor.kotlin.core.publisher.toMono
 
 interface UserValidator {
     fun validate(user: CreateUser): Mono<CreateUser>
-//    fun validateEmail(email: String): Mono<String>
-//    fun validateUsername(username: String): Mono<String>
+    fun validate(user: User): Mono<User>
 }
 
 class UserValidatorImpl : UserValidator {
@@ -25,11 +25,6 @@ class UserValidatorImpl : UserValidator {
     private val usernameHint = "should be at least 4 and at most 64 characters long consisting of letters, digits, '-', '.' and '_'"
     private val emailHint = "should match the email criteria"
     private val passwordHint = "should be at least 6 and at most 64 characters long containing at least one letter and at least on digit"
-
-//    private fun validateString(str: String, regex: Regex, hint: String) =
-//        str.toMono()
-//            .filter { it.matches(regex) }
-//            .switchIfEmpty { UserValidationException(hint).toMono() }
 
     private val validateCreateUser: Validation<CreateUser> = Validation {
         CreateUser::name { pattern(nameRegex) hint nameHint }
@@ -52,9 +47,24 @@ class UserValidatorImpl : UserValidator {
             }
         }
 
-//    override fun validateEmail(email: String): Mono<String> =
-//        validateString(str = email, hint = emailHint, regex = emailRegex)
-//
-//    override fun validateUsername(username: String): Mono<String> =
-//        validateString(str = username, hint = usernameHint, regex = usernameRegex)
+    private val validateUser: Validation<User> = Validation {
+        User::name { pattern(nameRegex) hint nameHint }
+        User::username { pattern(usernameRegex) hint usernameHint }
+        User::email { pattern(emailRegex) hint emailHint }
+        User::password { pattern(passwordRegex) hint passwordHint }
+    }
+
+    override fun validate(user: User): Mono<User> =
+        when (val result = validateUser(user)) {
+            is Valid -> result.value.toMono()
+            is Invalid -> {
+                val message = listOf(
+                    User::name,
+                    User::username,
+                    User::email,
+                    User::password
+                ).joinToString { "${it.name} ${result[it].orEmpty().joinToString()}." }
+                UserValidationException(message).toMono()
+            }
+        }
 }

@@ -9,7 +9,7 @@ fun routes(userHandler: UserHandler): RouterFunction<ServerResponse> = router {
     "/api/users".nest {
         POST("/", userHandler::createUser)
         POST("/login", userHandler::loginUser)
-//        PUT("/{id}", userHandler::updateUser)
+        PUT("/{id}", userHandler::updateUser)
 //        DELETE("/{id}", userHandler::deleteUser)
         GET("/", userHandler::getAllUsers)
         GET("/{id}", userHandler::getUserById)

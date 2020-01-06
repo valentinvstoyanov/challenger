@@ -39,6 +39,10 @@ class UserExceptionHandler : ErrorWebExceptionHandler {
                 ServerResponse.status(UNAUTHORIZED)
                     .bodyValue(ApiError(UNAUTHORIZED.value(), "User login failed", listOf(ApiSubError("users", "User credentials error", "Failed to login user with ${ex.emailOrUsername}"))))
             }
+            is UserIdChangeException -> {
+                badRequest()
+                    .bodyValue(ApiError(BAD_REQUEST.value(), "User id change", listOf(ApiSubError("users", "Attempt to change user id", "Changing user id ${ex.from} to ${ex.to} is not allowed"))))
+            }
         }
 
         return handled.flatMap { it.writeTo(exchange, HandlerStrategiesResponseContext(withDefaults())) }
