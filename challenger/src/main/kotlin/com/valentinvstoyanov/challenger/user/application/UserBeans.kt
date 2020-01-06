@@ -1,5 +1,6 @@
 package com.valentinvstoyanov.challenger.user.application
 
+import com.valentinvstoyanov.challenger.user.application.handler.UserAuthenticationExceptionHandler
 import com.valentinvstoyanov.challenger.user.application.handler.UserExceptionHandler
 import com.valentinvstoyanov.challenger.user.application.handler.UserHandler
 import com.valentinvstoyanov.challenger.user.application.security.AuthenticationManager
@@ -28,6 +29,7 @@ fun beans(): BeanDefinitionDsl = beans {
     bean<UserDetailsService>()
     bean(SecurityConfig::springSecurityFilterChain)
     bean<UserExceptionHandler>()
+    bean<UserAuthenticationExceptionHandler>()
     bean<UserHandler>()
     bean(::routes)
 }

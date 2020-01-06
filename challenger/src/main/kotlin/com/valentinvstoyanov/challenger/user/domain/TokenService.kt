@@ -1,8 +1,7 @@
 package com.valentinvstoyanov.challenger.user.domain
 
-import com.valentinvstoyanov.challenger.user.domain.model.Token
-import com.valentinvstoyanov.challenger.user.domain.model.TokenContent
-import com.valentinvstoyanov.challenger.user.domain.model.User
+import com.valentinvstoyanov.challenger.user.domain.model.*
+import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import reactor.core.publisher.Mono
@@ -43,5 +42,7 @@ class JwtTokenService(secret: String, private val expirationMillis: Long) : Toke
             username = claims.subject,
             expiration = claims.expiration.toInstant()
         )
+    }.onErrorMap {
+        if (it is ExpiredJwtException) TokenExpiredException() else InvalidTokenException()
     }
 }
