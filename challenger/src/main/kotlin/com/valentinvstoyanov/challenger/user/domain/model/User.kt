@@ -1,5 +1,8 @@
 package com.valentinvstoyanov.challenger.user.domain.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY
 import java.time.Instant
 
 data class User(
@@ -7,9 +10,7 @@ data class User(
     val name: String,
     val email: String,
     val username: String,
-    val password: String,
-    val followers: List<User>,
-    val following: List<User>,
+    @JsonProperty(access = WRITE_ONLY) val password: String,
     val createdAt: Instant,
-    val enabled: Boolean = true
+    @JsonIgnore val enabled: Boolean = true
 )

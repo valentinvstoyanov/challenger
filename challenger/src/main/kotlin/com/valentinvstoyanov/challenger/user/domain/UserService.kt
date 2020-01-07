@@ -29,7 +29,13 @@ class UserServiceImpl(private val userRepository: UserRepository, private val us
             .switchIfEmpty { EmailAlreadyTakenException(user.email).toMono() }
             .filterWhen { userRepository.getByUsername(user.username).filter { it.id == user.id }.map { true } }
             .switchIfEmpty { UsernameAlreadyTakenException(user.username).toMono() }
-            .flatMap { userRepository.update(it) }
+            .flatMap { userRepository.getById(user.id) }
+            .flatMap {
+                userRepository.update(
+                    if (passwordEncoder.match(raw = user.password, encoded = it.password)) user
+                    else user.copy(password = passwordEncoder(user.password))
+                )
+            }
 
     override fun loginUser(user: LoginUser): Mono<User> =
         userRepository.getByEmail(user.emailOrUsername)

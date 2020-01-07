@@ -11,8 +11,6 @@ data class DbUser(
     val email: String,
     val username: String,
     val password: String,
-    val followers: List<User>,
-    val following: List<User>,
     val createdAt: Instant
 ) {
     companion object {
@@ -23,8 +21,6 @@ data class DbUser(
                 email = user.email,
                 username = user.username,
                 password = user.password,
-                followers = user.followers,
-                following = user.following,
                 createdAt = user.createdAt
             )
 
@@ -35,8 +31,6 @@ data class DbUser(
                 email = user.email,
                 username = user.username,
                 password = user.password,
-                followers = emptyList(),
-                following = emptyList(),
                 createdAt = Instant.now()
             )
     }
@@ -47,8 +41,6 @@ data class DbUser(
         email = email,
         username = username,
         password = password,
-        followers = followers,
-        following = following,
         createdAt = createdAt
     )
 }
