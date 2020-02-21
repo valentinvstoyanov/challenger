@@ -4,8 +4,7 @@ import com.valentinvstoyanov.challenger.user.domain.TokenService
 import com.valentinvstoyanov.challenger.user.domain.UserService
 import com.valentinvstoyanov.challenger.user.domain.model.CreateUser
 import com.valentinvstoyanov.challenger.user.domain.model.LoginUser
-import com.valentinvstoyanov.challenger.user.domain.model.User
-import com.valentinvstoyanov.challenger.user.domain.model.UserIdChangeException
+import com.valentinvstoyanov.challenger.user.domain.model.UpdateUser
 import org.springframework.web.reactive.function.server.*
 import org.springframework.web.reactive.function.server.ServerResponse.created
 import org.springframework.web.reactive.function.server.ServerResponse.ok
@@ -19,13 +18,8 @@ class UserHandler(private val userService: UserService, private val tokenService
             .flatMap { created(URI.create("${request.path()}/${it.id}")).json().bodyValue(it) }
 
     fun updateUser(request: ServerRequest): Mono<ServerResponse> =
-        request.bodyToMono<User>()
-            .map {
-                val pathId = request.pathVariable("id")
-                if (it.id != pathId) throw UserIdChangeException(pathId, it.id)
-                it
-            }
-            .flatMap { userService.updateUser(it) }
+        request.bodyToMono<UpdateUser>()
+            .flatMap { userService.updateUser(request.pathVariable("id"), it) }
             .flatMap { ok().json().bodyValue(it) }
 
     fun loginUser(request: ServerRequest): Mono<ServerResponse> =

@@ -1,6 +1,7 @@
 package com.valentinvstoyanov.challenger.user.domain
 
 import com.valentinvstoyanov.challenger.user.domain.model.CreateUser
+import com.valentinvstoyanov.challenger.user.domain.model.UpdateUser
 import com.valentinvstoyanov.challenger.user.domain.model.User
 import com.valentinvstoyanov.challenger.user.domain.model.UserValidationException
 import io.konform.validation.Invalid
@@ -13,6 +14,7 @@ import reactor.kotlin.core.publisher.toMono
 interface UserValidator {
     fun validate(user: CreateUser): Mono<CreateUser>
     fun validate(user: User): Mono<User>
+    fun validate(user: UpdateUser): Mono<UpdateUser>
 }
 
 class UserValidatorImpl : UserValidator {
@@ -63,6 +65,27 @@ class UserValidatorImpl : UserValidator {
                     User::username,
                     User::email,
                     User::password
+                ).joinToString { "${it.name} ${result[it].orEmpty().joinToString()}." }
+                UserValidationException(message).toMono()
+            }
+        }
+
+    private val validateUpdateUser: Validation<UpdateUser> = Validation {
+        UpdateUser::name ifPresent { pattern(nameRegex) hint nameHint }
+        UpdateUser::username ifPresent { pattern(usernameRegex) hint usernameHint }
+        UpdateUser::email ifPresent { pattern(emailRegex) hint emailHint }
+        UpdateUser::newPassword ifPresent { pattern(passwordRegex) hint passwordHint }
+    }
+
+    override fun validate(user: UpdateUser): Mono<UpdateUser> =
+        when (val result = validateUpdateUser(user)) {
+            is Valid -> result.value.toMono()
+            is Invalid -> {
+                val message = listOf(
+                    UpdateUser::name,
+                    UpdateUser::username,
+                    UpdateUser::email,
+                    UpdateUser::newPassword
                 ).joinToString { "${it.name} ${result[it].orEmpty().joinToString()}." }
                 UserValidationException(message).toMono()
             }
