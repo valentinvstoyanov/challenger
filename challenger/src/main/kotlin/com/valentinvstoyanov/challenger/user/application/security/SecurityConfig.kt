@@ -20,6 +20,7 @@ class SecurityConfig(
             .securityContextRepository(serverSecurityContextRepository)
             .authorizeExchange()
             .pathMatchers(HttpMethod.POST, "/api/users/login", "/api/users").permitAll()
+            .pathMatchers(HttpMethod.GET, "/actuator/**").permitAll()
             .anyExchange().authenticated()
             .and().build()
 }

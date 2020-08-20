@@ -21,8 +21,6 @@ internal class JwtTokenServiceTest {
             name = "Test Name",
             username = "test username",
             password = "test password",
-            followers = emptyList(),
-            following = emptyList(),
             createdAt = Instant.now()
         )
 
