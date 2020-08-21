@@ -3,6 +3,7 @@ package com.valentinvstoyanov.challenger.user.application.handler
 import com.valentinvstoyanov.challenger.user.domain.TokenService
 import com.valentinvstoyanov.challenger.user.domain.UserService
 import com.valentinvstoyanov.challenger.user.domain.model.CreateUser
+import com.valentinvstoyanov.challenger.user.domain.model.LoggedUser
 import com.valentinvstoyanov.challenger.user.domain.model.LoginUser
 import com.valentinvstoyanov.challenger.user.domain.model.UpdateUser
 import org.springframework.web.reactive.function.server.*
@@ -25,7 +26,7 @@ class UserHandler(private val userService: UserService, private val tokenService
     fun loginUser(request: ServerRequest): Mono<ServerResponse> =
         request.bodyToMono<LoginUser>()
             .flatMap { userService.loginUser(it) }
-            .map { tokenService.createToken(it) }
+            .map { LoggedUser(it.id, tokenService.createToken(it)) }
             .flatMap { ok().bodyValue(it) }
 
 //    fun deleteUser(request: ServerRequest): Mono<ServerResponse> =

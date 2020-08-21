@@ -1,4 +1,3 @@
 package com.valentinvstoyanov.challenger.user.domain.model
 
-class LoggedUser {
-}
+data class LoggedUser(val id: String, val token: Token)
