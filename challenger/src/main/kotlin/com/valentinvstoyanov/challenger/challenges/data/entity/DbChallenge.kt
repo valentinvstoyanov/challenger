@@ -47,7 +47,7 @@ data class DbChallenge(
         name = name,
         description = description,
         difficulty = difficulty,
-        popularity = popularity!!,
+        popularity = popularity ?: 0.0,
         isCompleted = isCompleted,
         completedBy = completedBy,
         createdBy = createdBy,
