@@ -19,7 +19,7 @@ interface UserValidator {
 
 class UserValidatorImpl : UserValidator {
     private val nameRegex = Regex("""^([a-zA-Z]+|[a-zA-Z]+\s{1}[a-zA-Z]{1,}|[a-zA-Z]+\s{1}[a-zA-Z]{3,}\s{1}[a-zA-Z]{1,})$""")
-    private val usernameRegex = Regex("""^[a-zA-z0-9-._]{4,64}$""")
+    private val usernameRegex = Regex("""^[a-zA-Z0-9-._]{4,64}$""")
     private val emailRegex = Regex("""^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$""")
     private val passwordRegex = Regex("""^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,64}$""")
 

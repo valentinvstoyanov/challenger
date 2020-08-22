@@ -8,6 +8,10 @@ interface ChallengeService {
     fun create(challenge: CreateChallenge): Mono<Challenge>
 }
 
-class ChallengeServiceImpl(private val challengeRepository: ChallengeRepository) : ChallengeService {
-    override fun create(challenge: CreateChallenge): Mono<Challenge> = challengeRepository.create(challenge)
+class ChallengeServiceImpl(
+    private val challengeRepository: ChallengeRepository,
+    private val challengeValidator: ChallengeValidator
+) : ChallengeService {
+    override fun create(challenge: CreateChallenge): Mono<Challenge> =
+        challengeValidator.validate(challenge).flatMap { challengeRepository.create(it) }
 }
