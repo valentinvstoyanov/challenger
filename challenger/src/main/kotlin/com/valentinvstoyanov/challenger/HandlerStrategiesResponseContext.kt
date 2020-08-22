@@ -1,4 +1,4 @@
-package com.valentinvstoyanov.challenger.users.application.handler
+package com.valentinvstoyanov.challenger
 
 import org.springframework.http.codec.HttpMessageWriter
 import org.springframework.web.reactive.function.server.HandlerStrategies

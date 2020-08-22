@@ -2,6 +2,7 @@ package com.valentinvstoyanov.challenger.users.application.handler
 
 import com.valentinvstoyanov.challenger.ApiError
 import com.valentinvstoyanov.challenger.ApiSubError
+import com.valentinvstoyanov.challenger.HandlerStrategiesResponseContext
 import com.valentinvstoyanov.challenger.users.domain.model.*
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
 import org.springframework.http.HttpStatus.BAD_REQUEST

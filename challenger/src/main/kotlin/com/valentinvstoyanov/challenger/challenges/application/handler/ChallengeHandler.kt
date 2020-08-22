@@ -1,4 +1,4 @@
-package com.valentinvstoyanov.challenger.challenges.application
+package com.valentinvstoyanov.challenger.challenges.application.handler
 
 import com.valentinvstoyanov.challenger.challenges.domain.ChallengeService
 import com.valentinvstoyanov.challenger.challenges.domain.model.CreateChallenge
