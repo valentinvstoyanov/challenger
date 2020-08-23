@@ -12,6 +12,9 @@ class ChallengeHandler(private val challengeService: ChallengeService) {
             .flatMap { challengeService.createChallenge(it) }
             .flatMap { ServerResponse.created(URI.create("${request.path()}/${it.id}")).json().bodyValue(it) }
 
+    fun getChallengeById(request: ServerRequest): Mono<ServerResponse> =
+        challengeService.getChallengeById(request.pathVariable("id")).flatMap { ServerResponse.ok().bodyValue(it) }
+
     fun getAllChallenges(request: ServerRequest): Mono<ServerResponse> =
         ServerResponse.ok().body(challengeService.getAllChallenges())
 }

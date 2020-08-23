@@ -8,6 +8,7 @@ import org.springframework.web.reactive.function.server.router
 fun routes(challengeHandler: ChallengeHandler): RouterFunction<ServerResponse> = router {
     "api/challenges".nest {
         POST("/", challengeHandler::createChallenge)
+        GET("/{id}", challengeHandler::getChallengeById)
         GET("/", challengeHandler::getAllChallenges)
     }
 }

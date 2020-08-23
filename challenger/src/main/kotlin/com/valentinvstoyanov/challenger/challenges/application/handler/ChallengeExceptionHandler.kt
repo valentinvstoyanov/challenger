@@ -5,6 +5,7 @@ import com.valentinvstoyanov.challenger.ApiSubError
 import com.valentinvstoyanov.challenger.challenges.domain.model.ChallengeException
 import com.valentinvstoyanov.challenger.challenges.domain.model.ChallengeValidationException
 import com.valentinvstoyanov.challenger.HandlerStrategiesResponseContext
+import com.valentinvstoyanov.challenger.challenges.domain.model.ChallengeNotFoundException
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
 import org.springframework.http.HttpStatus
 import org.springframework.web.reactive.function.server.HandlerStrategies
@@ -21,6 +22,8 @@ class ChallengeExceptionHandler : ErrorWebExceptionHandler {
         val handled = when(ex) {
             is ChallengeValidationException -> ServerResponse.badRequest()
                 .bodyValue(ApiError(HttpStatus.BAD_REQUEST.value(), "Challenge validation failed", listOf(ApiSubError("challenges", "Challenge fields validation failed", ex.hint))))
+            is ChallengeNotFoundException -> ServerResponse.badRequest()
+                .bodyValue(ApiError(HttpStatus.BAD_REQUEST.value(), "Challenge not found", listOf(ApiSubError("challenges", "Challenge was not found", "Failed to find challenge with id = ${ex.id}"))))
         }
 
         return handled.flatMap { it.writeTo(exchange, HandlerStrategiesResponseContext(HandlerStrategies.withDefaults())) }

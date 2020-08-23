@@ -12,5 +12,7 @@ class PersistentChallengeRepository(private val challengeDao: ChallengeDao) : Ch
     override fun create(challenge: CreateChallenge): Mono<Challenge> =
         challengeDao.insert(DbChallenge.from(challenge)).map { it.toChallenge() }
 
+    override fun getById(id: String): Mono<Challenge> = challengeDao.findById(id).map { it.toChallenge() }
+
     override fun getAll(): Flux<Challenge> = challengeDao.findAll().map { it.toChallenge() }
 }

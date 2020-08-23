@@ -7,5 +7,6 @@ import reactor.core.publisher.Mono
 
 interface ChallengeRepository {
     fun create(challenge: CreateChallenge): Mono<Challenge>
+    fun getById(id: String): Mono<Challenge>
     fun getAll(): Flux<Challenge>
 }
